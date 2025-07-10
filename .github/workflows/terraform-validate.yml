@@ -41,9 +41,9 @@ jobs:
 
       - name: Install conftest
         run: |
-          curl -L -o conftest https://github.com/open-policy-agent/conftest/releases/latest/download/conftest-linux-amd64
-          chmod +x conftest
-          sudo mv conftest /usr/local/bin
+          wget -O - https://github.com/open-policy-agent/conftest/releases/download/v0.62.0/conftest_0.62.0_Linux_arm64.tar.gz | tar xz
+          sudo mv conftest /usr/local/bin/
+          conftest --version
 
       - name: Run conftest test
         run: |

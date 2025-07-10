@@ -16,6 +16,18 @@ jobs:
       - name: Checkout Terraform repo
         uses: actions/checkout@v3
 
+      - name: Checkout OPA policies repo
+        uses: actions/checkout@v3
+        with:
+          repository: rrodriguez942/opa-policies-central
+          path: opa-policies
+
+      - name: Authenticate to Google Cloud
+        uses: google-github-actions/auth@v1
+        with:
+          credentials_json: '${{ secrets.GOOGLE_CREDENTIALS }}'
+          export_environment_variables: true
+
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v3
         with:
@@ -35,4 +47,4 @@ jobs:
 
       - name: Run conftest test
         run: |
-          conftest test plan.json --policy ./policy
+          conftest test plan.json --policy opa-policies/terraform

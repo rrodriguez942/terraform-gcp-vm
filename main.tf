@@ -7,7 +7,7 @@ terraform {
   }
 }
 provider "google" {
-  credentials = file("stryra-88c7c6b46544.json") # Archivo de credenciales
+  # credentials = file("stryra-88c7c6b46544.json") # Archivo de credenciales
   project = "stryra" # ID de mi proyecto
   region = "southamerica-east1"
 }

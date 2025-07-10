@@ -1,0 +1,9 @@
+# ingnorar credenciales de GCP
+stryra-88c7c6b46544.json
+
+# ignorar estado de Terraform
+terraform.tfstate
+terraform.tfstate.backup
+
+# ignorar carpeta .terraform
+.terraform/

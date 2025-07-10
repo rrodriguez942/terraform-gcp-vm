@@ -1,0 +1,44 @@
+name: Terraform Plan + Conftest validation
+
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  terraform-validate:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout OPA policies repo
+        uses: actions/checkout@v3
+        with:
+          repository: rrodriguez942/opa-policies-central
+          path: opa-policies
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: 1.12.2
+
+      - name: Authenticate to Google Cloud
+        uses: google-github-actions/auth@v1
+        with:
+          credentials_json: '${{secrets.GOOGLE_CREDENTIALS}}'
+          export_environment_variables: 'true'
+
+      - name: Terraform init and plan
+        run: |
+          terraform init
+          terraform plan -out=tfplan.binary
+          terraform show -json tfplan.binary > plan.json
+
+      - name: Install conftest
+        run: |
+          curl -L -o conftest https://github.com/open-policy-agent/conftest/releases/latest/download/conftest-linux-amd64
+          chmod +x conftest
+          sudo mv conftest /usr/local/bin
+
+      - name: Run conftest test
+        run: |
+          conftest test plan.json --policy opa-policies/terraform
